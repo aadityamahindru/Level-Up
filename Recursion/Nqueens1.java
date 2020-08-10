@@ -3,12 +3,14 @@ class Nqueens1{
         solve();
     }
     public static void solve(){
-        int n=3;
-        int box=6;
+        int n=4;
+        int x=4,y=4;
         //System.out.println(nQueensPermutation(n,0,0,"",new boolean[box]));
         //System.out.println(nQueensCombinations(n,0,0,"",new boolean[box]));
         //System.out.println(nQueensCombinations_sub(n,0,0,"",new boolean[box]));
-        System.out.println(nQueensPermutation_sub(n,0,0,"",new boolean[box]));
+        //System.out.println(nQueensPermutation_sub(n,0,0,"",new boolean[box]));
+        //System.out.println(twoDnQueensCombinations_sub(n,0,"",new boolean[x][y]));
+        System.out.println(row2DnQueensCombinations_sub(n,0,"",new boolean[x][y]));
     }
 
 
@@ -74,4 +76,36 @@ class Nqueens1{
         c+=nQueensPermutation_sub(n,qno,idx+1,ans,box);
         return c;
     }
+    public static int twoDnQueensCombinations_sub(int n,int idx,String ans,boolean box[][]){
+        if(n==0){
+            System.out.println(ans);
+            return 1;
+        }
+        int x=box.length;
+        int y=box[0].length;
+        int ct=0;
+        for(int i=idx;i<x*y;i++){
+            int r=i/y;
+            int c=i%y;
+            ct+=twoDnQueensCombinations_sub(n-1,i+1,ans+"( "+r+" "+c+" )",box);
+        }
+        return ct;
+    }
+    public static int row2DnQueensCombinations_sub(int n,int row,String ans,boolean box[][]){
+        if(n==0||row==box.length){
+            if(n==0){
+                System.out.println(ans);
+                return 1;
+            }
+            return 0;
+        }
+        int x=box.length;
+        int y=box[0].length;
+        int c=0;
+        for(int i=0;i<y;i++){
+            c+=row2DnQueensCombinations_sub(n-1,row+1,ans+"( "+row+" "+i+" ),",box);
+        }
+        return c;
+    }
+
 }
