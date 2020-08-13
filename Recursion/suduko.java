@@ -102,7 +102,7 @@ class suduko{
         for(int num=1;num<=9;num++){
             if(isSafePlace(r,c,board,num)){
                 board[r][c]=num;
-                count+=sudukoSolver(board,idx+1);
+                count+=sudukoSolver2(board,idx+1);
                 board[r][c]=0;
             }
         }

@@ -1,6 +1,6 @@
 class Solution {
     public int totalNQueens(int n) {
-      return nQueen(0,n,new boolean[n][n]);
+        //return nQueen(0,n,new boolean[n][n]);
     }
     public boolean isSafe(int row,int col,boolean box[][]){
         int dir[][]={{-1,-1},{-1,0},{-1,1}};
