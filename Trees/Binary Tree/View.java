@@ -38,7 +38,8 @@ class View{
         //topView(node);
         // topViewLvl(node);
        // diagonalLeft(node);
-        diagonalRight(node);
+        // diagonalRight(node);
+        border(node);
     }
     public static void zigzag(Node node){
         Stack<Node> ms=new Stack<>();
@@ -321,5 +322,40 @@ class View{
             }
             System.out.println();
         }
+    }
+    //border
+    public static void border(Node node){
+        ArrayList<Integer> ans=new ArrayList<>();
+        ans.add(node.data);
+        printLeft(node.left,ans);
+        printLeaf(node,ans);
+        printRight(node.right,ans);
+        for(Integer val:ans){
+            System.out.print(val+" ");
+        }
+    }
+    public static void printLeft(Node node,ArrayList<Integer> ans){
+        if(node==null||(node.left==null&&node.right==null)){
+            return;
+        }
+        ans.add(node.data);
+        printLeft(node.left,ans);
+    }
+    public static void printLeaf(Node node,ArrayList<Integer> ans){
+        if(node==null){
+            return;
+        }
+        if(node.left==null&&node.right==null){
+            ans.add(node.data);
+        }
+        printLeaf(node.left,ans);
+        printLeaf(node.right,ans);
+    }
+    public static void printRight(Node node,ArrayList<Integer> ans){
+        if(node==null||(node.left==null&&node.right==null)){
+            return;
+        }
+        printRight(node.right,ans);
+        ans.add(node.data);
     }
 }
