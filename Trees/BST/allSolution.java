@@ -73,6 +73,26 @@ class allSolution{
         return node;
     }
     public static Node removeNode(Node node,int data){
-        
+        if(node==null){
+            return null;
+        }
+        if(data<node.val){
+          node.left=removeNode(node.left,data);  
+        }else if(data>node.val){
+            node.right=removeNode(node.right,data);
+        }else{
+            if(node.right==null||node.left==null)
+                return node.left!=null?node.left:node.right;
+            int minEle=minimum(node.right);
+            node.val=minEle;
+            node.right=removeNode(node.right,minEle);
+        }
+        return node;  
+    }
+    public int minimum(Node node){
+        if(node.left==null){
+            return node.val;
+        }
+        return minimum(node.left);
     }
 }
