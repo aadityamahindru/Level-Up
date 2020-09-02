@@ -1,5 +1,5 @@
 import java.util.*;
-class leftSubSum{
+class GFG{
     public static void display(Node node){
         if(node==null) return;
         StringBuilder sb = new StringBuilder();
@@ -41,10 +41,8 @@ class leftSubSum{
         solve(root);
    }
    public static void solve(Node node){
-        Node find=findNext(node,700);
-        if(find==null) System.out.println("null");
-        else
-        System.out.println(find.data);
+        deepestLeftLeaf(node,0,true);
+        System.out.println(deepestLeaf.data);
    }
    public static int leftSum(Node node){
        if(node==null) return 0;
@@ -81,5 +79,19 @@ class leftSubSum{
             if(temp.right!=null) q.add(temp.right);
         }
         return null;
+    }
+
+    //https://www.geeksforgeeks.org/deepest-left-leaf-node-in-a-binary-tree/
+    static Node deepestLeaf=null;
+    static int maxdepth=0;
+    public static void deepestLeftLeaf(Node node,int lvl,boolean isLeft){
+        if(node==null) return;
+        if(isLeft&&node.right==null&&node.left==null&&lvl>maxdepth){
+            maxdepth=lvl;
+            deepestLeaf=node;
+            return;
+        }
+        deepestLeftLeaf(node.left,lvl+1,true);
+        deepestLeftLeaf(node.right,lvl+1,false);
     }
 }
