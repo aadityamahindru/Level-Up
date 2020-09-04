@@ -91,3 +91,117 @@ class Solution {
     }
 }
 
+
+
+//1249 leetcode
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        Stack<Integer> st=new Stack<>();
+        boolean isValid[]=new boolean[s.length()];
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            char ch=s.charAt(i);
+            if(ch=='(') st.push(i);
+            else if(ch==')'){
+                if(st.size()>0&&s.charAt(st.peek())=='('){
+                    int j=st.pop();
+                    isValid[j]=true;
+                    isValid[i]=true;
+                }
+            }else{
+                isValid[i]=true;
+            }
+        }
+        for(int i=0;i<s.length();i++){
+            char ch=s.charAt(i);
+            if(isValid[i]) sb.append(ch);
+        }
+        return sb.toString();
+    }
+}
+
+
+//735 leetcode
+
+class Solution {
+    public int[] asteroidCollision(int[] arr) {
+        Stack<Integer> st=new Stack<>();
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]>0) st.push(arr[i]);
+            else{
+                while(st.size()>0&&st.peek()>0&& st.peek()< -arr[i]) st.pop();
+                if(st.size()>0&&st.peek() == -arr[i]) st.pop();
+                else if(st.size()==0||st.peek()<0) st.push(arr[i]);
+            }
+        }
+        int ans[]=new int[st.size()];
+        int i=st.size()-1;
+        while(st.size()!=0){
+            ans[i--]=st.pop();
+        }
+        return ans;
+    }
+    
+}
+// leetcode 84
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> st=new Stack<>();
+        st.push(-1);
+        int ans=0;
+        for(int i=0;i<heights.length;i++){
+            while(st.size()>1&&heights[st.peek()]>=heights[i]){
+                int h=heights[st.pop()];
+                int w=i-st.peek()-1;
+                ans=Math.max(ans,h*w);
+            }
+            st.push(i);
+        }
+        while(st.size()>1){
+            int h=heights[st.pop()];
+            int w=heights.length-st.peek()-1;
+            ans=Math.max(ans,h*w);
+        }
+        return ans;
+    }
+}
+
+
+//85 leetcode
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if(matrix.length==0||matrix[0].length==0) return 0;
+        int n=matrix.length;
+        int m=matrix[0].length;
+        int height[]=new int[m];
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                height[j]= matrix[i][j]=='1'?height[j]+1:0;
+            }
+            ans=Math.max(ans,largestRectangleArea(height));
+        }
+        return ans;
+    }
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> st=new Stack<>();
+        st.push(-1);
+        int ans=0;
+        for(int i=0;i<heights.length;i++){
+            while(st.size()>1&&heights[st.peek()]>=heights[i]){
+                int h=heights[st.pop()];
+                int w=i-st.peek()-1;
+                ans=Math.max(ans,h*w);
+            }
+            st.push(i);
+        }
+        while(st.size()>1){
+            int h=heights[st.pop()];
+            int w=heights.length-st.peek()-1;
+            ans=Math.max(ans,h*w);
+        }
+        return ans;
+    }
+}
