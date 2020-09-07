@@ -41,8 +41,9 @@ class GFG{
         solve(root);
    }
    public static void solve(Node node){
-        deepestLeftLeaf(node,0,true);
-        System.out.println(deepestLeaf.data);
+        HashMap<Integer,Integer> hm =new HashMap<>();
+        reversePath(node,100,hm,1);
+        display(node);
    }
    public static int leftSum(Node node){
        if(node==null) return 0;
@@ -94,4 +95,39 @@ class GFG{
         deepestLeftLeaf(node.left,lvl+1,true);
         deepestLeftLeaf(node.right,lvl+1,false);
     }
+
+    // https://www.geeksforgeeks.org/remove-nodes-root-leaf-paths-length-k/
+
+    public static Node removeK(Node node,int k,int lvl){
+        if(node==null) return null;
+        if(node.left==null&&node.right==null){
+            if(lvl!=k) return null;
+            return node;
+        }
+        node.left=removeK(node.left,k,lvl+1);
+        node.right=removeK(node.right,k,lvl+1);
+        if(node.left==null&&node.right==null) return null;
+        return node;
+    }
+    //https://www.geeksforgeeks.org/reverse-tree-path/
+    static int nidx=1;
+    public static boolean reversePath(Node node,int val,HashMap<Integer,Integer> hm,int lvl){
+        if(node==null)  return false;
+        hm.put(lvl,node.data);
+        if(node.data==val){
+            node.data=hm.get(nidx++);
+            return true;
+        }
+        boolean right=false;
+        boolean left=reversePath(node.left,val,hm,lvl+1);
+        if(!left){
+            right= reversePath(node.right,val,hm,lvl+1);
+        }
+        if(!left&& !right) hm.remove(lvl);
+        else if(left||right){
+            node.data=hm.get(nidx++);
+            return true;
+        }
+        return false;
+    } 
 }
