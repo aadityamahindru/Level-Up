@@ -36,14 +36,36 @@ class GFG{
         return node;
     }
    public static void main(String[] args) {
-        int[] arr={10,20,40,-1,-1,50,80,-1,-1,90,-1,-1,30,60,100,-1,-1,-1,70,110,-1,-1,120,-1,-1};
+        int[] arr={26,18,10,8,3,-1,-1,4,-1,-1,11,6,-1,-1,-1,21,-1,-1,30,7,-1,-1,5,12,-1,-1,2,-1,-1};
         Node root = constructTree(arr);
         solve(root);
    }
+   static class Pair{
+       int ls;
+       int rs;
+       Pair(int ls,int rs){
+           this.ls=ls;
+           this.rs=rs;
+       }
+   }
    public static void solve(Node node){
-        HashMap<Integer,Integer> hm =new HashMap<>();
-        reversePath(node,100,hm,1);
-        display(node);
+        // HashMap<Integer,Integer> hm =new HashMap<>();
+        // reversePath(node,100,hm,1);
+        // display(node);
+        ArrayList<Integer> ans=new ArrayList<>();
+        leftRifgtSum(node,ans);
+        System.out.println(ans);
+   }
+   public static Pair leftRifgtSum(Node node ,ArrayList<Integer> ans){
+       if(node==null){
+           return new Pair(0,0);
+       }
+       Pair left=leftRifgtSum(node.left,ans);
+       Pair right=leftRifgtSum(node.right,ans);
+       if(left.ls!=0&&right.rs!=0&&(left.ls==right.rs)){
+           ans.add(node.data);
+       }
+       return new Pair(left.ls+node.data,right.rs+node.data);
    }
    public static int leftSum(Node node){
        if(node==null) return 0;
