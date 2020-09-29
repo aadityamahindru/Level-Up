@@ -246,6 +246,111 @@ class Solution {
 }
 
 
+// leetcode 1091
+public int shortestPathBinaryMatrix(int[][] grid) {
+    int n=grid.length;
+    if(grid[0][0]==1||grid[n-1][n-1]==1) return -1;
+    int dir[][]={{1,0},{-1,0},{0,1},{0,-1},{1,1},{-1,1},{1,-1},{-1,-1}};
+    Queue<Integer> q=new ArrayDeque<>();
+    q.add(0);
+    grid[0][0]=1;
+    int level=0;
+    while(q.size()>0){
+        int size=q.size();
+        while(size-->0){
+            int rmv=q.remove();
+            int i=rmv/n;
+            int j=rmv%n;
+            if(i==n-1&&j==n-1) return level+1;
+            for(int d=0;d<dir.length;d++){
+                int r=i+dir[d][0];
+                int c=j+dir[d][1];
+                if(r>=0&&c>=0&&r<n&&c<n&&grid[r][c]==0){
+                    q.add(r*n+c);
+                    grid[r][c]=1;
+                }
+            }
+        }
+        level++;
+    }
+    return -1;
+}
+
+//542 leetcode
+public int[][] updateMatrix(int[][] matrix) {
+    if(matrix.length==0||matrix[0].length==0) return matrix;
+    int n=matrix.length;
+    int m=matrix[0].length;
+    int ans[][]=new int[n][m];
+    for(int arr[]:ans) Arrays.fill(arr,-1);
+    int[][] dir = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+    Queue<Integer> q=new ArrayDeque<>();
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(matrix[i][j]==0){
+               q.add(i*m+j);
+                ans[i][j]=0;
+            } 
+        }
+    }
+    int lvl=1;
+    while(q.size()>0){
+        int size=q.size();
+        while(size-->0){
+            int vtx=q.remove();
+            int i=vtx/m;
+            int j=vtx%m;
+            for(int d=0;d<4;d++){
+                int r=i+dir[d][0];
+                int c=j+dir[d][1];
+                if(r>=0&&c>=0&&r<n&&c<m&&ans[r][c]==-1){
+                    q.add(r*m+c);
+                    ans[r][c]=lvl;
+                }
+            }
+        }
+        lvl++;
+    }
+    return ans;
+}
+// leetcode 1020
+
+public int numEnclaves(int[][] arr) {
+    int n=arr.length;
+    int m=arr[0].length;
+    Queue<Integer> q=new ArrayDeque<>();
+    int ones=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            ones+=arr[i][j];
+            if((i==0||j==0||i==n-1||j==m-1)&&arr[i][j]==1){
+                q.add(i*m+j);
+                arr[i][j]=0;
+                ones--;
+            }
+        }
+    }
+    if(ones==0) return 0;
+    int dir[][]={{1,0},{-1,0},{0,1},{0,-1}};
+    while(q.size()>0){
+        int size=q.size();
+        while(size-->0){
+            int rvtx=q.remove();
+            int i=rvtx/m;
+            int j=rvtx%m;
+            for(int d=0;d<4;d++){
+                int r=i+dir[d][0];
+                int c=j+dir[d][1];
+                if(r>=0&&c>=0&&r<n&&c<m&&arr[r][c]==1){
+                    q.add(r*m+c);
+                    arr[r][c]=0;
+                    ones--;
+                }
+            }
+        }
+    }
+    return ones;
+}
 
 // topological sort
 
@@ -273,4 +378,6 @@ class Solution {
         }
         return count==n;
     }
+
+
 }

@@ -1,15 +1,18 @@
 import java.util.*;
 class basics{
     public static void main(String[] args) {
-        solve();
+        // solve();
+        stringSet();
     }
     public static void solve(){
-        int n=10;
-        int dp[]=new int[n+1];
+        int n=5;
+        int dp[][]=new int[n][n];
         int arr[]={2,5,8,3};
-        LinkedList<Integer> list=new LinkedList<>();
-        System.out.println(boardPath_jumps(0,10,arr,list));
-        print(dp);
+        // LinkedList<Integer> list=new LinkedList<>();
+        // System.out.println(boardPath_jumps(0,10,arr,list));
+        int dir[][]={{1,0},{0,1},{1,1}};
+        System.out.println(multi_jumps(0,0,n-1,n-1,dp,dir));
+        print2d(dp);
     }
 
     public static void print(int arr[]){
@@ -119,4 +122,148 @@ class basics{
         return dp[si]=count;
     }
 
+    public static int multi_jumps(int sr,int sc,int er,int ec,int dp[][],int dir[][]){
+        if(sr==er&&sc==ec) return dp[sr][sc]=1;
+        if(dp[sr][sc]!=0) return dp[sr][sc];
+        int count=0;
+        for(int d=0;d<dir.length;d++){
+            for(int jump=1;jump<=Math.max(er,ec);jump++){
+                int r=sr+jump*dir[d][0];
+                int c=sc+jump*dir[d][1];
+                if(r>=0&&c>=0&&r<=er&&c<=ec){
+                    count+=multi_jumps(r,c,er,ec,dp,dir);
+                }
+            }
+        }
+        return dp[sr][sc]=count;
+    }
+
+    // string set=============================================================================
+    public static void stringSet(){
+        // String str = "geeksforgeeks";
+        // int n=str.length();
+        // int dp[][]=new int[n][n];
+        // System.out.println(longestPSS(0,n-1,str,dp));
+        // int len = dp[0][n-1];
+        // char[] ans = new char[len];
+        // longestPSS_String(str,0,n-1,dp,ans,0,len-1);
+
+        //lcs
+        String s1 = "AGGTAB";
+        String s2 = "GXTXAYB";
+        
+        int n = s1.length();
+        int m = s2.length();
+        int[][] dp = new int[n+1][m+1];
+        System.out.println(lCSS(s1,s2,0,0,dp));
+        int len=dp[0][0];
+        char ans[]=new char[len];
+        lCSS_String(s1,s2,0,0,dp,ans,0);
+        print2d(dp);
+    }
+    public static int longestPSS(int i,int j,String str,int dp[][]){
+        if(i==j){
+            return dp[i][j]=1;
+        }
+        if(i>j){
+            return 0;
+        }
+        if(dp[i][j]!=0) return dp[i][j];
+        if(str.charAt(i)==str.charAt(j)){
+            return dp[i][j]= longestPSS(i+1,j-1,str,dp)+2;
+        }else{
+            return dp[i][j]=Math.max(longestPSS(i,j-1,str,dp),longestPSS(i+1,j,str,dp));
+        }
+    }
+    /// tabulation
+    public int longestPalindromeSubseq(String s) {
+        int n=s.length();
+        int dp[][]=new int[n][n];
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;j++,i++){
+                if(gap==0){
+                    dp[i][j]=1;
+                }else{
+                    if(s.charAt(i)==s.charAt(j)){
+                        dp[i][j]=dp[i+1][j-1]+2;
+                    }else{
+                        dp[i][j]=Math.max(dp[i][j-1],dp[i+1][j]);
+                    }
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+    public static void longestPSS_String(String str,int i ,int j,int[][] dp,char[] ans,int si,int ei){
+        if(i>=j){
+            if(i==j){
+                ans[si]=str.charAt(i);
+                for(char ch:ans) System.out.print(ch);
+                System.out.println();
+            }
+            return;
+        }
+        if(str.charAt(i)==str.charAt(j)){
+            ans[si]=ans[ei]=str.charAt(i);
+            longestPSS_String(str,i+1,j-1,dp,ans,si+1,ei-1);
+        }else if(dp[i+1][j]>dp[i][j-1]){
+            longestPSS_String(str,i+1,j,dp,ans,si,ei);
+        }else{
+            longestPSS_String(str,i,j-1,dp,ans,si,ei);
+        }
+    }
+
+
+
+    // lcs ===================================================
+    public static int lCSS(String s1,String s2,int i,int j,int[][] dp){
+        if(i == s1.length() || j == s2.length()){
+            return dp[i][j] = 0;
+        }
+
+        if(dp[i][j] != 0) return dp[i][j];
+
+        if(s1.charAt(i) == s2.charAt(j)) return dp[i][j] = lCSS(s1,s2,i+1,j+1,dp) + 1;
+        else return dp[i][j] = Math.max(lCSS(s1,s2,i+1,j,dp),lCSS(s1,s2,i,j+1,dp));        
+    }
+    public static void lCSS_String(String s1,String s2,int i,int j,int[][] dp,char ans[],int idx){
+        if(i==s1.length()||j==s2.length()){
+            for(char ch:ans) System.out.print(ch);
+            System.out.println();
+            return;
+        }
+        if(s1.charAt(i)==s2.charAt(j)){
+            ans[idx]=s1.charAt(i);
+            lCSS_String(s1,s2,i+1,j+1,dp,ans,idx+1);
+        }else if(dp[i+1][j]>dp[i][j+1]){
+            lCSS_String(s1,s2,i+1,j,dp,ans,idx);
+        }else{
+            lCSS_String(s1,s2,i,j+1,dp,ans,idx);
+        }
+    }
+
+
+    //https://practice.geeksforgeeks.org/problems/count-palindromic-subsequences/1
+    int countPS(String str)
+    {
+        // Your code here
+        int n=str.length();
+        int dp[][]=new int[n][n];
+        return countPS(0,n-1,str,dp);
+    }
+    public int countPS(int i,int j,String str,int dp[][]){
+        if(i>=j){
+            return i==j?1:0;
+        }
+        if(dp[i][j]!=0) return dp[i][j];
+        int x=countPS(i+1,j-1,str,dp);
+        int y=countPS(i,j-1,str,dp);
+        int z=countPS(i+1,j,str,dp);
+        if(str.charAt(i)==str.charAt(j)){
+            dp[i][j]=(y+z+1);
+        }else{
+            dp[i][j]=(y+z-x);
+        }
+        return dp[i][j];
+    }
 }

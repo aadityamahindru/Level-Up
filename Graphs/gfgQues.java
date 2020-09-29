@@ -101,3 +101,5 @@ class gfgQues{
         graph[u].add(new prims(v,w));
     }
 }
+
+

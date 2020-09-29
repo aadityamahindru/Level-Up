@@ -29,3 +29,21 @@ public  int minCostClimbingStairs(int[] cost) {
     int ans = minCostClimbingStairs_DP(cost,dp.length,dp);
     return ans;
 }
+
+
+// min cost multiple moves
+
+public int minCostWJumps(int st,int sc,int er,int ec,int cost[][]){
+    if(st==er&&sc==ec) return cost[st][sc];
+    int c=0;
+    for(int jump=1;jump+sc<=ec;jump++){
+        c=Math.min(c,minCostWJumps(st,sc+jump,er,ec,cost));
+    }
+    for(int jump=1;jump+st<=er;jump++){
+        c=Math.min(c,minCostWJumps(st+jump,sc,er,ec,cost));
+    }
+    for(int jump=1;jump+sc<=ec&&jump+st<=er;jump++){
+        c=Math.min(c,minCostWJumps(st+jump,sc+jump,er,ec,cost));
+    }
+    return c+cost[st][sc];
+}

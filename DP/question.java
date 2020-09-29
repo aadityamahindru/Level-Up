@@ -92,3 +92,52 @@ class GFG {
 }
 
 //https://practice.geeksforgeeks.org/problems/mobile-numeric-keypad/0   hw
+
+
+
+// leetcode 115;
+class Solution {
+    public int numDistinct(String s, String t) {
+        int n=s.length();
+        int m=t.length();
+        int dp[][]=new int[n+1][m+1];
+        for(int arr[]:dp) Arrays.fill(arr,-1);
+        return numDistinct(s,t,n,m,dp);
+    }
+    public int numDistinct(String s,String t,int n,int m,int dp[][]){
+        if(n<m) return 0;
+        if(m==0) return 1;
+        if(dp[n][m]!=-1) return dp[n][m];
+        int a=numDistinct(s,t,n-1,m-1,dp);
+        int b=numDistinct(s,t,n-1,m,dp);
+        if(s.charAt(n-1)==t.charAt(m-1)) return dp[n][m]=a+b;
+        return dp[n][m]=b;
+    }
+}
+// tabulation
+
+public int numDistinct(String s, String t) {
+	int n=s.length();
+	int m=t.length();
+	int dp[][]=new int[n+1][m+1];
+	return numDistinct_DP(s,t,n,m,dp);
+}
+public static int numDistinct_DP(String s,String t,int x,int y,int dp[][]){
+	for(int n=0;n<=x;n++){
+		for(int m=0;m<=y;m++){
+			if(n<m){
+				dp[n][m]=0;
+				continue;
+			}
+			if(m==0) {
+				dp[n][m]=1;
+				continue;
+			}
+			int a=dp[n-1][m-1]; //numDistinct(s,t,n-1,m-1,dp);
+			int b=dp[n-1][m]; //numDistinct(s,t,n-1,m,dp);
+			if(s.charAt(n-1)==t.charAt(m-1))dp[n][m]=a+b;
+			else dp[n][m]=b;
+		}
+	}
+	return dp[x][y];
+}
