@@ -1,3 +1,4 @@
+import java.util.*;
 class LIS{
     public static void print(int[] arr){
         for(int ele: arr)
@@ -41,7 +42,7 @@ class LIS{
 
     //left to Right
     public static int[] LIS_DP(int[] arr){
-        int n = arr.length();
+        int n = arr.length;
         int[] dp = new int[n];
 
         dp[0] = 1;
@@ -64,7 +65,7 @@ class LIS{
 
     //Right to Left
     public static int[] LDS_DP(int[] arr){
-        int n = arr.length();
+        int n = arr.length;
         int[] dp = new int[n];
 
         int len = 0;
@@ -98,7 +99,7 @@ class LIS{
 
     // left to right
     public static int[] LDS_DP_02(int[] arr){
-        int n = arr.length();
+        int n = arr.length;
         int[] dp = new int[n];
 
         dp[0] = 1;
@@ -120,7 +121,7 @@ class LIS{
 
     //Right to Left
     public static int[] LIS_DP_02(int[] arr){
-        int n = arr.length();
+        int n = arr.length;
         int[] dp = new int[n];
 
         int len = 0;
@@ -157,7 +158,7 @@ class LIS{
 	}  
 
     public static int minNoOFDeletion(int[] arr){
-        int n = arr.length();
+        int n = arr.length;
         int[] dp = new int[n];
 
         int len = 0;
@@ -238,8 +239,8 @@ class LIS{
     }
 
     //413 leetocode
-    public int numberOfArithmeticSlices(int[] A) {
-        if(A.length < 3) return 0;
+    public int numberOfArithmeticSlices(int[] arr) {
+        if(arr.length < 3) return 0;
         
         int ans = 0;
         int count = 0;
@@ -320,21 +321,41 @@ class LIS{
     
     //For you --> https://www.geeksforgeeks.org/maximum-sum-alternating-subsequence-sum/
 
+    public static int maximumAlternatingSub(int arr[],int n){
+        Pair dp[]=new Pair[n];
+        int max=0;
+        int flag=0;
+        for(int i=0;i<n;i++) dp[i]=new Pair(0,0);
+        dp[0].inc=arr[0];
+        dp[0].dec=arr[0];
+        for(int i=1;i<n;i++){
+            for(int j=i-1;j>=0;j--){
+                if(arr[i]<arr[j]) {
+                    dp[i].dec=Math.max(dp[i].dec,dp[j].inc+arr[i]);
+                    flag=1;
+                }
+                if(arr[i]>arr[j]&&flag==1) dp[i].inc=Math.max(dp[i].inc,dp[j].dec+arr[i]);
+            }
+            max=Math.max(max,Math.max(dp[i].inc,dp[i].dec));
+        }
+        return max;
+    }
 
 
 
     //  https://www.geeksforgeeks.org/dynamic-programming-building-bridges/             same as russian doll
     public static int BuildingBridges(int[] arr){
-
-
+        return 0;
     }
 
 
 
     public static void LISset(){
 
-        int[] arr = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15,10};
-        System.out.println(LIS_rec(arr));
+        // int[] arr = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15,10};
+        int arr[]={8, 2, 3, 5, 7, 9, 10};
+        int n=arr.length;
+        System.out.println(maximumAlternatingSub(arr,n));
     }
 
        public static void solve(){
