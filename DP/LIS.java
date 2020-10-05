@@ -142,7 +142,18 @@ class LIS{
     // https://www.geeksforgeeks.org/maximum-sum-increasing-subsequence-dp-14/
     public static int maxSumIS(int arr[], int n)  
 	{  
-	    
+        int ans=0;
+	    int dp[]=new int[n];
+	    for(int i=0;i<n;i++){
+	        dp[i]=arr[i];
+	        for(int j=i-1;j>=0;j--){
+	            if(arr[j]<arr[i]){
+	                dp[i]=Math.max(dp[i],dp[j]+arr[i]);
+	            }
+	        }
+	        ans=Math.max(ans,dp[i]);
+	    }
+	    return ans;
 	}  
 
     public static int minNoOFDeletion(int[] arr){
@@ -308,7 +319,11 @@ class LIS{
     }
     
     //For you --> https://www.geeksforgeeks.org/maximum-sum-alternating-subsequence-sum/
-    
+
+
+
+
+    //  https://www.geeksforgeeks.org/dynamic-programming-building-bridges/             same as russian doll
     public static int BuildingBridges(int[] arr){
 
 
