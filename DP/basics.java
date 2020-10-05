@@ -1,17 +1,22 @@
 import java.util.*;
 class basics{
     public static void main(String[] args) {
-        // solve();
-        stringSet();
+        solve();
+        // stringSet();
     }
     public static void solve(){
-        int n=5;
-        int dp[][]=new int[n][n];
-        int arr[]={2,5,8,3};
-        // LinkedList<Integer> list=new LinkedList<>();
-        // System.out.println(boardPath_jumps(0,10,arr,list));
-        int dir[][]={{1,0},{0,1},{1,1}};
-        System.out.println(multi_jumps(0,0,n-1,n-1,dp,dir));
+        // int n=5;
+        // int dp[][]=new int[n][n];
+        // int arr[]={2,5,8,3};
+        // // LinkedList<Integer> list=new LinkedList<>();
+        // // System.out.println(boardPath_jumps(0,10,arr,list));
+        // int dir[][]={{1,0},{0,1},{1,1}};
+        // System.out.println(multi_jumps(0,0,n-1,n-1,dp,dir));
+
+        //target sum
+        int arr[]={2,3,5,7};
+        int dp[][]=new int[5][11];
+        System.out.println(targetSum_DP(arr,10,4,dp));
         print2d(dp);
     }
 
@@ -265,5 +270,79 @@ class basics{
             dp[i][j]=(y+z-x);
         }
         return dp[i][j];
+    }
+
+    // target sum
+    public static int targetSum(int arr[],int target,int n,int dp[][]){
+        if(target==0||n==0){
+            return dp[n][target]=target==0?1:0;
+        }
+        if(dp[n][target]!=0) return dp[n][target];
+        if(target-arr[n-1]>=0){
+            dp[n][target]+=targetSum(arr,target-arr[n-1],n-1,dp);
+        }
+        dp[n][target]+=targetSum(arr,target,n-1,dp);
+        return dp[n][target];
+    }
+    public static int targetSum_DP(int arr[],int target,int n,int dp[][]){
+        int N=n, Tar=target;
+        for(n=0;n<=N;n++){
+            for(target=0;target<=Tar;target++){
+                if(target==0||n==0){
+                    dp[n][target]=target==0?1:0;
+                    continue;
+                }
+                if(target-arr[n-1]>=0){
+                    dp[n][target]+= dp[n-1][target-arr[n-1]];
+                }
+                dp[n][target]+= dp[n-1][target];
+            }
+        }
+        return dp[N][Tar];
+    }
+
+    // leetode 494 target sum
+    
+    public int findTargetSumWays(int[] nums, int tar) {
+        int n = nums.length;
+        if(n == 0) return 0;
+        int sum=0;
+        for(int val:nums) sum+=val;
+        if(tar > sum || tar < -sum) return 0;
+        int dp[][]=new int[n+1][2*sum+1];
+        for(int arr[]:dp) Arrays.fill(arr,-1);
+        return findTargetSumWays(nums,n,tar+sum,sum,dp);
+    }
+    public int findTargetSumWays(int arr[],int n,int tar,int sum, int dp[][]){
+        if(n==0){
+            return tar==sum?1:0;
+        }
+        if(dp[n][sum]!=-1) return dp[n][sum];
+        int ans=0;
+        ans+=findTargetSumWays(arr,n-1,tar,sum-arr[n-1],dp);
+        ans+=findTargetSumWays(arr,n-1,tar,sum+arr[n-1],dp);
+        return dp[n][sum]=ans;
+        
+    }
+
+    // liss====================================================================
+    
+    public static int minNoOFDeletion(int[] arr){
+        int n = arr.length();
+        int[] dp = new int[n];
+
+        int len = 0;
+        for(int i = 0; i < n; i++ ){   
+            dp[i] = 1;
+            for(int j = i-1;j>=0;j--){
+               if(arr[j] >= arr[i]){
+                  dp[i] = Math.max(dp[i],dp[j] + 1);
+               }
+            }
+
+            len = Math.max(len,dp[i]);
+        }
+
+        return n - len;
     }
 }

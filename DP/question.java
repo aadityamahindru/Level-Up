@@ -357,3 +357,207 @@ public static void main (String[] args) {
 		 }
 		 return dp[N][M];
 	 }
+	 // leetode 91
+	 class Solution {
+		public int numDecodings(String s) {
+			int dp[]=new int[s.length()+1];
+			return numDecodings(s,0,dp);
+		}
+		public int numDecodings(String s, int idx,int dp[]){
+			if(idx==s.length()){
+			   return dp[idx]=1;
+			}
+			int num=s.charAt(idx)-'0';
+			if(num==0) return 0;
+			if(dp[idx]!=0) return dp[idx];
+			int c=0;
+			c+=numDecodings(s,idx+1,dp);
+			if(idx<s.length()-1){
+				num=num*10+(s.charAt(idx+1)-'0');
+				if(num>=10&&num<=26){
+					c+=numDecodings(s,idx+2,dp);
+				}
+			}
+			return dp[idx]=c;
+		}
+	}
+	//tabulation  
+	public int numDecodings(String s, int idx,int dp[]){
+		for(idx=s.length();idx>=0;idx--){
+			 if(idx==s.length()){
+				 dp[idx]=1;
+				 continue;
+			 }
+			 int num=s.charAt(idx)-'0';
+			 if(num==0){
+				 dp[idx]=0;
+				 continue;
+			 }
+			 int c=0;
+			 c+= dp[idx+1]; 
+			 if(idx<s.length()-1){
+				 num=num*10+(s.charAt(idx+1)-'0');
+				 if(num>=10&&num<=26){
+					 c+=dp[idx+2];
+				 }
+			 }
+			 dp[idx]=c;
+		}
+		 return dp[0];
+	 }
+// leetocde 639 (good ques)
+
+class Solution {
+    int mod=(int)1e9+7;
+    public int numDecodings(String s) {
+        long dp[]=new long[s.length()+1];
+        Arrays.fill(dp,-1);
+        return (int)numDecodings(s,0,dp);
+    }
+    public long numDecodings(String s, int idx,long dp[]){
+        if(idx==s.length()){
+            return dp[idx]=1;
+        }
+        char ch1=s.charAt(idx);
+        if(ch1=='0') return 0;
+        if(dp[idx]!=-1) return dp[idx];
+        long count=0;
+        if(ch1=='*'){
+            count=(count%mod+(9*numDecodings(s,idx+1,dp))%mod)%mod;
+        }else{
+            count=(count%mod+numDecodings(s,idx+1,dp)%mod)%mod;
+        }
+        if(idx<s.length()-1){
+            char ch2=s.charAt(idx+1);
+            if(ch1!='*'&&ch2!='*'){
+                int num=(ch1-'0')*10+(ch2-'0');
+                if(num>=10&&num<=26) count=(count%mod+numDecodings(s,idx+2,dp)%mod)%mod;
+            }else if(ch1=='*'&&ch2!='*'){
+                if(ch2>='0'&&ch2<='6')
+                    count=(count%mod+(2*numDecodings(s,idx+2,dp))%mod)%mod;
+                else
+                    count=(count%mod+(numDecodings(s,idx+2,dp))%mod)%mod;
+            }else if(ch1!='*'&&ch2=='*'){
+                if(ch1=='1') count=(count%mod+(9*numDecodings(s,idx+2,dp))%mod)%mod;
+                else if(ch1=='2') count=(count%mod+(6*numDecodings(s,idx+2,dp))%mod)%mod;
+            }else if(ch1=='*'&&ch2=='*'){
+                count=(count%mod+(15*numDecodings(s,idx+2,dp))%mod)%mod;
+            }
+        }
+        return dp[idx]=count;
+    }
+}
+
+
+
+
+// leetocde 322
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int dp[]=new int[amount+1];
+        Arrays.fill(dp,-1);
+        int ans=coinChange(coins,amount,dp);
+        return ans==(int)1e8?-1:ans;
+    }
+    public int coinChange(int[] coins,int amount,int[] dp){
+        if(amount==0){
+            return dp[amount]=0;
+        }
+        if(dp[amount]!=-1) return dp[amount];
+        int max=(int)1e8;
+        for(int coin:coins){
+            if(amount-coin>=0){
+                int ans=coinChange(coins,amount-coin,dp);
+                if(ans!=(int)1e8&&ans+1<max) max=ans+1;
+            }
+        }
+        return dp[amount]=max;
+    }
+}
+
+//russian dalls leetcode 354
+class Solution {
+    public int maxEnvelopes(int[][] envelopes) {
+        Arrays.sort(envelopes,(a,b)->{
+            if(a[0]!=b[0]) return a[0]-b[0];
+            return b[1]-a[1];
+        });
+        int dp[]=new int[envelopes.length];
+        int oMax=0;
+        for(int i=0;i<envelopes.length;i++){
+            int max=0;
+            for(int j=0;j<i;j++){
+                if(envelopes[j][1]<envelopes[i][1]&&dp[j]>max){
+                    max=dp[j];
+                }
+            }
+            dp[i]=max+1;
+            oMax=Math.max(oMax,dp[i]);
+        }
+        return oMax;
+    }
+}
+// leetcode 673
+class Solution {
+    class Pair{
+        int len=0;
+        int c=0;
+        Pair(int len,int count){
+            this.len=len;
+            this.c=c;
+        }
+    }
+    public int findNumberOfLIS(int[] nums) {
+        if(nums.length==0) return 0;
+        Pair dp[]=new Pair [nums.length];
+        for(int i=0;i<nums.length;i++) dp[i]=new Pair(0,0);
+        int omax=0,count=0;;
+        for(int i=0;i<nums.length;i++){
+            int max=0;
+            int c=1;
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    if(dp[j].len>max){
+                        max=dp[j].len;
+                        c=dp[j].c;
+                    }else if(dp[j].len==max){
+                        c+=dp[j].c;
+                    }
+                }
+            }
+            dp[i].len=max+1;
+            dp[i].c=c;
+            if(dp[i].len>omax){
+                omax=dp[i].len;
+                count=dp[i].c;
+            }else if(dp[i].len==omax){
+                count+=dp[i].c;
+            }
+        }
+        return count;
+    }
+}
+
+// leetcode 413
+class Solution {
+    public int numberOfArithmeticSlices(int[] arr) {
+        if(arr.length<3) return 0;
+        int ans=0;
+        int count=0;
+        for(int i=1;i<arr.length-1;i++){
+            int d1=arr[i]-arr[i-1];
+            int d2=arr[i+1]-arr[i];
+            if(d1==d2) ans+=(++count);
+            else count=0;
+        }
+        return ans;
+    }
+}
+
+// https://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/
+
+
+
+
+
+// leetcode

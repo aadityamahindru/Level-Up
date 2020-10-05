@@ -381,3 +381,105 @@ class Solution {
 
 
 }
+// leetcode 787
+class Solution {
+    class Edge{
+        int v;
+        int w;
+        Edge(int v,int w){
+            this.v=v;
+            this.w=w;
+        }
+    }
+    class Pair implements Comparable<Pair>{
+        int vtx;
+        int k;
+        int wsf;
+        Pair(int vtx,int wsf,int k){
+            this.vtx=vtx;
+            this.wsf=wsf;
+            this.k=k;
+        }
+        public int compareTo(Pair o){
+            return this.wsf-o.wsf;
+        }
+    }
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Edge> graph[]=new ArrayList[n];
+        for(int i=0;i<n;i++) graph[i]=new ArrayList<>();
+        for(int arr[]:flights){
+            int u=arr[0];
+            int v=arr[1];
+            int w=arr[2];
+            graph[u].add(new Edge(v,w));
+        }
+        PriorityQueue<Pair> pq=new PriorityQueue<>();
+        pq.add(new Pair(src,0,k+1));
+        while(pq.size()>0){
+            Pair rvtx=pq.remove();
+            if(rvtx.k<0) continue;
+            if(rvtx.vtx==dst) return rvtx.wsf;
+            for(Edge e:graph[rvtx.vtx]){
+                    pq.add(new Pair(e.v,rvtx.wsf+e.w,rvtx.k-1));
+            }
+            
+        }
+        return -1;
+    }
+}
+
+//743 leetcode
+class Solution {
+    class Edge{
+        int v;
+        int wt;
+        Edge(int v,int wt){
+            this.v=v;
+            this.wt=wt;
+        }
+    }
+    class Pair implements Comparable<Pair>{
+        int v;
+        int wsf;
+        Pair(int v,int wsf){
+            this.v=v;
+            this.wsf=wsf;
+        }
+        public int compareTo(Pair o){
+            return this.wsf-o.wsf;
+        }
+    }
+    public int networkDelayTime(int[][] times, int N, int K) {
+        ArrayList<Edge> graph[]=new ArrayList[N+1];
+        for(int i=0;i<=N;i++) graph[i]=new ArrayList<>();
+        for(int arr[]:times){
+            int u=arr[0];
+            int v=arr[1];
+            int wt=arr[2];
+            graph[u].add(new Edge(v,wt));
+        }
+        PriorityQueue<Pair> pq=new PriorityQueue<>();
+        int dist[]=new int[N+1];
+        Arrays.fill(dist,(int)1e9);
+        pq.add(new Pair(K,0));
+        dist[K]=0;
+        while(pq.size()>0){
+            int size=pq.size();
+            while(size-->0){
+                Pair temp=pq.remove();
+                for(Edge e:graph[temp.v]){
+                    if(e.wt+temp.wsf<dist[e.v]){
+                        dist[e.v]=e.wt+temp.wsf;
+                        pq.add(new Pair(e.v,e.wt+temp.wsf));
+                    }
+                }
+            }
+        }
+        int ans=(int)-1e8;
+        for(int i=1;i<=N;i++){
+            if(dist[i]==(int)1e9) return -1;
+            ans=Math.max(ans,dist[i]);
+        }
+        return ans;
+    }
+}
