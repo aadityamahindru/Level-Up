@@ -345,4 +345,63 @@ class basics{
 
         return n - len;
     }
+
+    // https://practice.geeksforgeeks.org/problems/find-if-string-is-k-palindrome-or-not1923/1
+    // same as lps
+    static int kPalindrome(String str, int n, int k)
+    {
+        // code here
+        int dp[][]=new int[n][n];
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap==0){
+                    dp[i][j]=1;
+                }else if(str.charAt(i)==str.charAt(j)){
+                    dp[i][j]=dp[i+1][j-1]+2;
+                }else{
+                    dp[i][j]=Math.max(dp[i+1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return (n-dp[0][n-1]<=k)?1:0;
+    }
+
+    // 688 leetcode
+    public double knightProbability(int N, int K, int r, int c) {
+        int dir[][]={{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
+        double dp[][][]=new double[K+1][N][N];
+        return knightProbability(N,K,r,c,dp,dir);
+    }
+    public double knightProbability(int N, int K, int r, int c, double dp[][][],int dir[][]){
+        if(K==0){
+            return dp[K][r][c]=1;
+        }
+        if(dp[K][r][c]!=0.0) return dp[K][r][c];
+        double count=0.0;
+        for(int d=0;d<dir.length;d++){
+            int x=r+dir[d][0];
+            int y=c+dir[d][1];
+            if(x>=0&&y>=0&&x<N&&y<N){
+                count+=knightProbability(N,K-1,x,y,dp,dir);
+            }
+        }
+        return dp[K][r][c]=count/8.0;
+    }
+
+    // leetcode 45 optimal solution O(n)
+    public int jump(int[] nums) {
+        if(nums.length==0) return 0;
+        int n=nums.length;
+        int jumps=0;
+        int maxEnding=0;
+        int maxDist=0;
+        for(int i=0;i<n-1;i++){
+            maxDist=Math.max(maxDist,nums[i]+i);
+            if(i==maxEnding){
+                maxEnding=maxDist;
+                jumps++;
+            }
+        }
+        return jumps;
+    }
 }
