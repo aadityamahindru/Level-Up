@@ -2,18 +2,21 @@ import java.util.*;
 class Set1{
     // ip list Q1-10
     //https://www.geeksforgeeks.org/print-words-together-set-characters/
-    public static int calculateKey(String str){
-        int key=0;
+    public String calculateKey(String str){
+        StringBuilder sb=new StringBuilder();
+        int freq[]=new int[26];
         for(int i=0;i<str.length();i++){
-            char ch=str.charAt(i);
-            key+=(ch-'a')+1;
+            freq[str.charAt(i)-'a']++;
         }
-        return key;
+        for(int i=0;i<26;i++){
+            while(freq[i]-->0) sb.append((char)(i+'a'));  // or add frequency in key string insted of this loop
+        }
+        return sb.toString();
     }
     public static void groupSameTogeter_(String words[]){
-        HashMap<Integer,ArrayList<String>> map=new HashMap<>();
+        HashMap<String,ArrayList<String>> map=new HashMap<>();
         for(int i=0;i<words.length;i++){
-            int key=calculateKey(words[i]);
+            String key=calculateKey(words[i]);
             map.putIfAbsent(key,new ArrayList<String>());
             map.get(key).add(words[i]);
         }
