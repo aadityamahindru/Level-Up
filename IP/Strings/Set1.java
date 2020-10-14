@@ -2,7 +2,7 @@ import java.util.*;
 class Set1{
     // ip list Q1-10
     //https://www.geeksforgeeks.org/print-words-together-set-characters/
-    public String calculateKey(String str){
+    public static String calculateKey(String str){
         StringBuilder sb=new StringBuilder();
         int freq[]=new int[26];
         for(int i=0;i<str.length();i++){
@@ -20,7 +20,7 @@ class Set1{
             map.putIfAbsent(key,new ArrayList<String>());
             map.get(key).add(words[i]);
         }
-        for(int key:map.keySet()){
+        for(String key:map.keySet()){
             System.out.println(map.get(key));
         }
     }
@@ -171,11 +171,31 @@ class Set1{
 	    } 
 	    return s1.substring(sidx,eidx+1);
     }
-    
+    // https://www.geeksforgeeks.org/make-largest-palindrome-changing-k-digits/
+    public static String largestPalindrome(String str,int k){
+        if(str.length()==0) return str;
+        int i=0,j=str.length()-1;
+        char arr[]=str.toCharArray();
+        while(i<j){
+            if(arr[i]!=arr[j]){
+                if(arr[i]>arr[j]) arr[j]=arr[i];
+                else arr[i]=arr[j];
+                k--;
+            }
+            i++;
+            j--;
+        }
+        if(k<=0) return (k==0)?new String(arr):"-1";
+
+
+    }
 
     public static void solve(){
         // groupSameTogeter();
-        checkBinaryAnagram(5,4);
+        // checkBinaryAnagram(5,4);
+        String str = "43435";    
+        int k = 3;
+        System.out.println(largestPalindrome(str,k));
     }
     public static void main(String[] args) {
         solve();
