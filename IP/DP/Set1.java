@@ -315,6 +315,37 @@ class Set1{
         }
         return dp[si][ei]=min+sum;
     }
+    //https://www.geeksforgeeks.org/minimum-insertions-to-form-a-palindrome-dp-28/
+    public static int palindromeInsert(String str,int i,int j,int dp[][]){
+	    if(i>=j){
+	        return dp[i][j]=0;
+	    }  
+	    if(dp[i][j]!=-1) return dp[i][j];
+	    char ch1=str.charAt(i);
+	    char ch2=str.charAt(j);
+	    if(ch1==ch2){
+	        return dp[i][j]=palindromeInsert(str,i+1,j-1,dp);
+	    }else{
+	        return dp[i][j]=Math.min(palindromeInsert(str,i+1,j,dp),palindromeInsert(str,i,j-1,dp))+1;
+	    }
+    }
+    //tab
+    public int palindromeInsert(String str,int dp[][]){
+	    int n=str.length();
+	    for(int gap=1;gap<n;gap++){
+	        for(int i=0,j=gap;j<n;j++,i++){
+	            char ch1=str.charAt(i);
+	            char ch2=str.charAt(j);
+	            if(ch1==ch2){
+	                dp[i][j]=dp[i+1][j-1];
+	            }else{
+	                dp[i][j]=Math.min(dp[i+1][j],dp[i][j-1])+1;
+	            }
+	        }
+	    }
+        return dp[0][n-1];
+    }
+    
     public static void print1D(int arr[]){
         for(int a:arr){
             System.out.print(a+"\t");
