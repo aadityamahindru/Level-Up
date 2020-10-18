@@ -226,4 +226,176 @@ class hashMapQues{
             else return false;
         }
     }
+    //781 leet
+    public int numRabbits(int[] arr) {
+        if(arr.length==0) return 0;
+        int ans=0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int ele : arr){
+            map.put(ele,map.getOrDefault(ele,0)+1);
+            if(map.get(ele)==1) ans+=ele +1;
+            if(map.get(ele)==ele+1) map.remove(ele);
+        }
+        return ans;
+    }
+
+    // 560 leet
+    public int subarraySum(int[] nums, int k) {
+        if(nums.length==0) return 0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        map.put(0,1);
+        int count=0,sum=0;
+        for(int ele:nums){
+            sum+=ele;
+            if(map.containsKey(sum-k)) count +=map.get(sum-k);
+            map.put(sum,map.getOrDefault(sum,0)+1);
+        }
+        return count;
+    }
+    // 974 leet
+    public int subarraysDivByK(int[] nums, int k) {
+        if(nums.length==0) return 0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        map.put(0,1);
+        int count=0,sum=0;
+        for(int ele:nums){
+            sum+=ele;
+            int val=(sum % k + k)%k;
+            if(map.containsKey(val)) count +=map.get(val);
+            map.put(val,map.getOrDefault(val,0)+1);
+        }
+        return count;
+    }
+    //https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s/0
+
+    public static int equal01(int arr[],int n){
+	    if(n==0) return 0;
+	    HashMap<Integer,Integer> map=new HashMap<>();
+	    map.put(0,1);
+	    int count=0,sum=0;
+	    for(int ele: arr){
+	        sum+=ele==1?1:-1;
+	        if(map.containsKey(sum)) count+=map.get(sum);
+	        map.put(sum,map.getOrDefault(sum,0)+1);
+	    }
+	    return count;
+    }
+    
+    //https://practice.geeksforgeeks.org/problems/longest-sub-array-with-sum-k/0
+    public static int longestSubArray(int arr[],int n, int k){
+	    if(n==0) return 0;
+	    HashMap<Integer,Integer> map=new HashMap<>();
+	    map.put(0,-1);
+	    int sum=0,max=0;
+	    for(int i=0;i<n;i++){
+	        sum+=arr[i];
+	        if(map.containsKey(sum-k)) max=Math.max(max,i-map.get(sum-k));
+	        if(!map.containsKey(sum)) map.put(sum,i);
+	    }
+	    return max;
+    }
+    //https://www.geeksforgeeks.org/longest-subarray-sum-divisible-k/
+    int longSubarrWthSumDivByK(int nums[], int n, int k)
+    {
+        if(nums.length==0) return 0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        map.put(0,-1);
+        int max=0,sum=0;
+        for(int i=0;i<n;i++){
+            sum+=nums[i];
+            int val=(sum % k + k)%k;
+            if(map.containsKey(val)) max=Math.max(max,i-map.get(val));
+            else map.put(val,i);
+        }
+        return max;
+    }
+    //https://www.geeksforgeeks.org/substring-equal-number-0-1-2/
+
+
+    // leetcode 3
+    public int lengthOfLongestSubstring(String s) {
+        if(s.length()<=1) return s.length();
+        int n=s.length();
+        int freq[]=new int[256];
+        int si=0,ei=0,len=0,count=0;
+        while(ei<n){
+            if(freq[s.charAt(ei)]++ > 0) count++;
+            while(count > 0){
+                if(freq[s.charAt(si++)]-- > 1) count--;
+            }
+            len=Math.max(len,ei-si+1);
+            ei++;
+        }
+        return len;
+    }
+    //https://practice.geeksforgeeks.org/problems/largest-subarray-of-0s-and-1s/1
+    int maxLen(int[] arr, int n)
+    {
+        if(n==0) return 0;
+	    HashMap<Integer,Integer> map=new HashMap<>();
+	    map.put(0,-1);
+	    int max=0,sum=0;
+	    for(int i=0;i<n;i++){
+	        sum+=arr[i]==1?1:-1;
+	        if(map.containsKey(sum)) max=Math.max(max,i-map.get(sum));
+	        else map.put(sum,i);
+	    }
+	    return max;
+    }
+    // 525 leetcode
+    public int findMaxLength(int[] arr) {
+        int n=arr.length;
+        if(n==0) return 0;
+	    HashMap<Integer,Integer> map=new HashMap<>();
+	    map.put(0,-1);
+	    int max=0,sum=0;
+	    for(int i=0;i<n;i++){
+	        sum+=arr[i]==1?1:-1;
+	        if(map.containsKey(sum)) max=Math.max(max,i-map.get(sum));
+	        else map.put(sum,i);
+	    }
+	    return max;
+    }
+
+
+    //https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+    public int numSubarraysWithSum(int[] nums, int S) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        map.put(0,1);
+        int count = 0;
+        int sum = 0;
+             
+        for(int i=0;i<nums.length;i++){
+            sum  += nums[i];
+            int val = sum - S;
+            if(map.containsKey(val)) count += map.get(val);   
+            map.put(sum,map.getOrDefault(sum,0) + 1);
+        }
+         
+         return count;
+     }
+     //https://www.geeksforgeeks.org/number-subarrays-sum-less-k/
+     public static void numOfSubarraysSumLessK(int[] arr,int k){
+        int si = 0,ei=0;
+        int n = arr.length;
+
+        int count = 0;
+        int sum = 0;
+        while(ei < n){
+            sum += arr[ei++];
+            while(sum > k && si < ei){
+                sum -= arr[si++]; 
+            }
+
+            count += (ei - si);
+        }
+
+        return count;
+    }
+
+    // 239 leetcode
+
+
+    // 76 leetcode
+
 }
