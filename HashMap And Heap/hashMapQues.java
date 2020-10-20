@@ -397,5 +397,111 @@ class hashMapQues{
 
 
     // 76 leetcode
+    public String minWindow(String s, String t) {
+        if(s.length()<t.length()) return "";
+        int ns=s.length();
+        int nt=t.length();
+        
+        int count=nt;
+        int si=0,ei=0,len=(int)1e8,head=0;
+        int freq[]=new int[128];
+        for(int i=0;i<nt;i++) freq[t.charAt(i)]++;
+        while(ei < ns){
+            if(freq[s.charAt(ei++)]-- >0 ) count--;
+            while(count==0){
+                if(ei-si<len) len=ei-(head=si);
+                if(freq[s.charAt(si++)]++ == 0) count++;
+            }
+        }
+        return len==(int)1e8?"":s.substring(head,head+len);
+    }
+    //https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+    //https://www.geeksforgeeks.org/smallest-subarray-with-all-occurrences-of-a-most-frequent-element/
+    public static void smallestMFSub(int arr[],int n){
+	    HashMap<Integer,Integer> map=new HashMap<>();
+	     HashMap<Integer,Integer> locc=new HashMap<>();
+	    for(int i=0 ; i<n ; i++){
+	      map.put(arr[i],map.getOrDefault(arr[i],0)+1);
+	      locc.put(arr[i],i);
+	    } 
+	    int maxFreq=0,maxEle=0;
+	    for(int key : map.keySet()){
+	        int val=map.get(key);
+	        if(val>maxFreq){
+	           maxEle=key;
+	           maxFreq=val;
+	        }else if(val==maxFreq&&locc.get(key)<locc.getOrDefault(maxEle,(int)1e8)){
+	            maxEle=key;
+	        }
+	    }
+	    int si=0,ei=0,head=0,len=(int)1e8;
+	    while(ei<n){
+	        if(arr[ei++]==maxEle) maxFreq--;
+	        while(maxFreq==0){
+	            if(ei-si<len) len=ei-(head=si);
+	            if(arr[si++]==maxEle) maxFreq++;
+	        }
+	    }
+	    for(int i=head;i<head+len;i++){
+	        System.out.print(arr[i]+" ");
+	    }
+	    System.out.println();
+	}
+    //https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/
 
+    //https://leetcode.com/problems/sliding-window-maximum/    
+    //239 leet
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n=nums.length;
+        PriorityQueue<int[]> pq= new PriorityQueue<>((a,b)->{
+            return b[0]-a[0];
+        });
+        int ans[]=new int[n-k+1];
+        int idx=0;
+        for(int i=0;i<nums.length;i++){
+            while(pq.size()>0&& pq.peek()[1]<=i-k) pq.poll();
+            pq.add(new int[]{nums[i],i});
+            if(i>=k-1){
+                ans[idx++]=pq.peek()[0];
+            }
+        }
+        return ans;
+    }
+    //optimized
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n=nums.length;
+        ArrayDeque<Integer> q=new ArrayDeque<>(); 
+        int ans[]=new int[n-k+1];
+        int idx=0;
+        for(int i=0;i<nums.length;i++){
+            while(q.size()>0 && q.getFirst()<=i-k) q.removeFirst();
+            while(q.size()>0 && nums[q.getLast()]<=nums[i]) q.removeLast();
+            q.addLast(i);
+            if(i>=k-1) ans[idx++]=nums[q.getFirst()];
+        }
+        return ans;
+    }
+    
+    //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-1/
+    //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-2/
+    //https://leetcode.com/problems/array-of-doubled-pairs/
+    // leet 954
+    public boolean canReorderDoubled(int[] A) {
+        if(A.length==0) return true;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int ele:A) map.put(ele,map.getOrDefault(ele,0)+1);
+        Integer arr[]=new Integer[A.length];
+        for(int i=0;i<A.length;i++) arr[i]=A[i];
+        Arrays.sort(arr,(a,b)->{
+           return Math.abs(a)-Math.abs(b); 
+        });
+        for(int ele:arr){
+            if(map.get(ele)==0) continue;
+            if(map.getOrDefault(2*ele,0)<=0) return false;
+            
+            map.put(ele,map.get(ele)-1);
+            map.put(2* ele,map.get(2*ele)-1);
+        }
+        return true;
+    }
 }
