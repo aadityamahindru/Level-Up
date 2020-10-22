@@ -416,6 +416,7 @@ class hashMapQues{
         return len==(int)1e8?"":s.substring(head,head+len);
     }
     //https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+    
     //https://www.geeksforgeeks.org/smallest-subarray-with-all-occurrences-of-a-most-frequent-element/
     public static void smallestMFSub(int arr[],int n){
 	    HashMap<Integer,Integer> map=new HashMap<>();
@@ -484,6 +485,7 @@ class hashMapQues{
     
     //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-1/
     //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-2/
+
     //https://leetcode.com/problems/array-of-doubled-pairs/
     // leet 954
     public boolean canReorderDoubled(int[] A) {

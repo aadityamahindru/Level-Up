@@ -70,8 +70,5 @@ class DllToBst{
         // display(root);
         System.out.println(root.prev.data+" "+root.data+" "+root.next.data);
     }
-
-
-    //1339
     //1325
 }
