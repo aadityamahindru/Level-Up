@@ -392,10 +392,31 @@ class hashMapQues{
 
         return count;
     }
-
-    // 239 leetcode
-
-
+    //https://www.geeksforgeeks.org/smallest-window-contains-characters-string/
+    public static void smallestWindow(String str){
+        int freq[]=new int[128];
+        boolean dist[]=new boolean[128];
+        int n=str.length();
+        int count=0,len=(int)1e8;
+        for(int i=0;i<n;i++){
+            char ch=str.charAt(i);
+            if(!dist[ch]){
+                dist[ch]=true;
+                count++;
+            }
+        }
+        int si=0,ei=0;
+        while(ei<n){
+             if(freq[str.charAt(ei++)]++ == 0) count--;
+             if(count==0){
+                 while(freq[str.charAt(si)]>1){
+                     freq[str.charAt(si++)]--;
+                 }
+                len=Math.min(len,ei-si);
+             }
+        }
+        System.out.println(len);
+     }
     // 76 leetcode
     public String minWindow(String s, String t) {
         if(s.length()<t.length()) return "";
@@ -416,6 +437,23 @@ class hashMapQues{
         return len==(int)1e8?"":s.substring(head,head+len);
     }
     //https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int n = s.length();
+        
+        int[] freq = new int[128];
+        int si = 0,ei = 0,len = 0,count = 0;
+        while(ei < n){
+            if(freq[s.charAt(ei++)]++ == 0) count++;
+            
+            while(count > k){
+                if(freq[s.charAt(si++)]-- == 1) count--;
+            }
+            
+            len = Math.max(len, ei - si);            
+        }
+        
+        return len;         
+    }
     
     //https://www.geeksforgeeks.org/smallest-subarray-with-all-occurrences-of-a-most-frequent-element/
     public static void smallestMFSub(int arr[],int n){
@@ -449,7 +487,23 @@ class hashMapQues{
 	    System.out.println();
 	}
     //https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/
-
+    public int lengthOfLongestSubstringKDistinct(String s) {
+        int n = s.length();
+        
+        int[] freq = new int[128];
+        int si = 0,ei = 0,len = 0,count = 0;
+        while(ei < n){
+            if(freq[s.charAt(ei++)]++ == 0) count++;
+            
+            while(count > 2){
+                if(freq[s.charAt(si++)]-- == 1) count--;
+            }
+            
+            len = Math.max(len, ei - si);            
+        }
+        
+        return len;         
+    }
     //https://leetcode.com/problems/sliding-window-maximum/    
     //239 leet
     public int[] maxSlidingWindow(int[] nums, int k) {
@@ -484,7 +538,36 @@ class hashMapQues{
     }
     
     //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-1/
+    public static int largestSubArray(int arr[]){
+        int len=0;
+        for(int i=0;i<arr.length-1;i++){
+            int max=arr[i],min=arr[i];
+            for(int j=i+1;j<arr.length;j++){
+                max=Math.max(max,arr[j]);
+                min=Math.min(min,arr[j]);
+                if(max-min==j-i) len=Math.max(len,j-i+1);
+            }
+        }
+        return len;
+    }
     //https://www.geeksforgeeks.org/length-largest-subarray-contiguous-elements-set-2/
+    public static int largestSubArray2(int arr[]){
+        int len=0;
+        HashSet<Integer> set=new HashSet<>();
+        for(int i=0;i<arr.length-1;i++){
+            int max=arr[i],min=arr[i];
+            set.add(arr[i]);
+            for(int j=i+1;j<arr.length;j++){
+                if(set.contain(arr[j])) break;
+                set.add(arr[j]);
+                max=Math.max(max,arr[j]);
+                min=Math.min(min,arr[j]);
+                if(max-min==j-i) len=Math.max(len,j-i+1);
+            }
+            set.clear();
+        }
+        return len;
+    }
 
     //https://leetcode.com/problems/array-of-doubled-pairs/
     // leet 954

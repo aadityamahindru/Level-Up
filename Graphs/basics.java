@@ -232,6 +232,51 @@ public class basics{
         BFS2(0,vis,6);
     }
 
+    // strongly connected component
+    public static void topoDfs(int src,ArrayList<Integer> ans,boolean vis[]){
+        vis[src]=true;
+        for(Edge e: graph[src]){
+            if(!vis[e.v]){
+                topoDfs(e.v,ans);
+            }
+        }
+        ans.add(src);
+    }
+    public static void sccDfs(int src, ArrayList<Edge> graph[],ArrayList<Integer> ans,boolean vis[]){
+        vis[src]=true;
+        ans.add(src);
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+                sccDfs(e.v,graph,ans,vis);
+            }
+        }
+    }
+    public static void SCC(){
+        ArrayList<Integer> ans=new ArrayList<>();
+        boolean vis[]=new boolean[N];
+        for(int i=0;i<N;i++){
+            if(!vis[]){
+                topoDfs(i,ans,vis);
+            }
+        }
+        ArrayList<Edge> ngraph[]=new ArrayList[N];
+        for(int i=0;i<N;i++) ngraph[i]=new ArrayList<>();
+        Arrays.fill(vis,false);
+        for(int i=0;i<N;i++){
+            for(Edge e:graph[i]){
+                ngraph[e.v].add(new Edge(i,0));
+            }
+        }
+        ArrayList<Integer> res=new ArrayList<>();
+        for(int i=ans.size()-1;i>=0;i--){
+            int src=ans.get(i);
+            if(!vis[src]){
+                sccDfs(src,ngraph,res,vis);
+            }
+            System.out.println(res);
+            res.clear();
+        }
+    }
     public static void main(String[] args){
         solve();
     }

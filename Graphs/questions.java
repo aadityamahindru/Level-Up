@@ -482,4 +482,36 @@ class Solution {
         }
         return ans;
     }
+
+    // 778 leetcode
+    public int swimInWater(int[][] grid) {
+        if(grid.length==0||grid[0].length==0) return 0;
+        int n=grid.length;
+        int m=grid[0].length;
+        int dir[][]={{0,1},{0,-1},{1,0},{-1,0}};
+        boolean vis[][]=new boolean[n][m];
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->{
+           return grid[a/m][a%m]-grid[b/m][b%m];
+        });
+        pq.add(0);
+        int maxTime=0;
+        vis[0][0]=true;
+        while(pq.size()>0){
+            int idx=pq.remove();
+            int i=idx/m;
+            int j=idx%m;
+            vis[i][j]=true;
+            maxTime=Math.max(maxTime,grid[i][j]);
+            if(i==n-1&&j==m-1) return maxTime;
+            for(int d=0;d<dir.length;d++){
+                int r=i+dir[d][0];
+                int c=j+dir[d][1];
+                if(r>=0&&c>=0&&r<n&&c<m&& !vis[r][c]){
+                    vis[r][c]=true;
+                    pq.add(r*m+c);
+                }
+            }
+        }
+        return -1;
+    }
 }

@@ -186,8 +186,25 @@ class Set1{
             j--;
         }
         if(k<=0) return (k==0)?new String(arr):"-1";
-
-
+        i=0;
+        j=str.length()-1;
+        while(i<=j){
+            if(i==j&&k>0){
+                arr[i]='9';
+            }
+            if(arr[i]<'9'){
+                if(k>=2&&arr[i]==str.charAt(i)&&arr[j]==str.charAt(j)){
+                    arr[i]=arr[j]='9';
+                    k-=2;
+                }else if(k>=1&&(arr[i]!=str.charAt(i)||arr[j]!=str.charAt(j))){
+                    arr[i]=arr[j]='9';
+                    k--;
+                }
+            }
+            i++;
+            j--;
+        }
+        return new String(arr);
     }
 
     public static void solve(){

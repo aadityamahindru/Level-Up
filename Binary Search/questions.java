@@ -33,7 +33,7 @@ class questions{
         }
         return -1;
     }
-    // 74 leetcode
+    // 74 leetcode && 240 leetcode
     public boolean searchMatrix(int[][] matrix, int target) {
         if(matrix.length==0||matrix[0].length==0) return false;
         int i=0,j=matrix[0].length-1;
@@ -97,5 +97,90 @@ class questions{
             else ei=mid-1;
         }
         return -1;
+    }
+    // leet 300 lis nlogn
+    public int lengthOfLIS(int[] nums) {
+        if(nums.length<=1) return nums.length;
+        ArrayList<Integer> arr=new ArrayList<>();
+        arr.add(nums[0]);
+        for(int i=1;i<nums.length;i++){
+            int idx=Collections.binarySearch(arr,nums[i]);
+            if(idx>=0) continue;
+            
+            idx=-idx-1;
+            if(idx==arr.size()) arr.add(nums[i]);
+            else arr.set(idx,nums[i]);
+        }
+        return arr.size();
+    }
+
+    //own binary search
+    public int lengthOfLIS(int[] nums) {
+        if(nums.length<=1) return nums.length;
+        ArrayList<Integer> arr=new ArrayList<>();
+        arr.add(nums[0]);
+        for(int i=1;i<nums.length;i++){
+            int si=0,ei=arr.size();
+            while(si<ei){
+                int mid=(si+ei)/2;
+                if(arr.get(mid)<nums[i]) si=mid+1;
+                else ei=mid;
+            }
+            if(ei==arr.size()) arr.add(nums[i]);
+            else arr.set(ei,nums[i]);
+        }
+        return arr.size();
+    }
+
+    //https://practice.geeksforgeeks.org/problems/inversion-of-array/0
+    public static long inversionCount(int arr[],int sortedArr[],int si,int ei){
+        if(si>ei) return 0;
+        int mid=(si+ei)/2;
+        long count=0;
+        count+=inversionCount(arr,sortedArr,si,mid);
+        count+=inversionCount(arr,sortedArr,mid+1,ei);
+        count+=totalInversion(arr,sortedArr,si,mid+1,ei);
+        return count;
+    }
+    public static long totalInversion(int arr[],int sortedArr[],int si,int mid,int ei){
+        long count=0;
+        int i=si,j=mid,k=si;
+        while(i<=mid-1&&j<=ei){
+            if(arr[i]<=arr[j]){
+                sortedArr[k++]=arr[i++];
+            }else{
+                count+=mid-i;
+                sortedArr[k++]=arr[j++];
+            }
+        }
+        while(i<=mid-1) sortedArr[k++]=arr[i++];
+        while(j<=ei) sortedArr[k++]=arr[j++];
+        while(si<=ei) arr[si]=sortedArr[si++];
+        return count;
+    }
+    public static long inversion(int arr[]){
+        int n=arr.length;
+        int sortedArr[]=new int[n];
+        return inversionCount(arr,sortedArr,0,n-1);
+    }
+
+    // 875 leet
+    public int minEatingSpeed(int[] piles, int H) {
+        int si=1,ei=(int)1e9;
+        while(si<ei){
+            int eatingSpeed=(si+ei)/2;
+            if(isPossibleToEat(piles,eatingSpeed,H))
+                ei=eatingSpeed;
+            else si=eatingSpeed+1;
+        }
+        return si;
+    }
+    public boolean isPossibleToEat(int arr[],int eatingSpeed,int H){
+        int hour=0;
+        for(int i=0;i<arr.length;i++){
+            hour+=((arr[i]-1)/eatingSpeed)+1;
+            if(hour>H) return false;
+        }
+        return true;
     }
 }
