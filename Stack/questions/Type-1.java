@@ -333,3 +333,34 @@ class MinStack {
         return (int)msf;
     }
 }
+//https://practice.geeksforgeeks.org/problems/reverse-first-k-elements-of-queue/1
+public Queue<Integer> modifyQueue(Queue<Integer> q, int k)
+    {
+      //add code here.
+      Stack<Integer> st=new Stack<>();
+      while(k-->0){
+          st.push(q.remove());
+      }
+      int size=q.size();
+      while(st.size()>0){
+          q.add(st.pop());
+      }
+      while(size-->0){
+          q.add(q.remove());
+      }
+      return q;
+    }
+//946
+
+public boolean validateStackSequences(int[] pushed, int[] popped) {
+    Stack<Integer> st=new Stack<>();
+    int idx=0;
+    for(int val:pushed){
+        st.push(val);
+        while(st.size()>0&&st.peek()==popped[idx]){
+            st.pop();
+            idx++;
+        }
+    }
+    return st.size()==0;
+}

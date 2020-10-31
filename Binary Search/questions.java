@@ -89,6 +89,24 @@ class questions{
         }
         return -1;
     }
+    // 33 without pivot
+    public int search(int[] arr, int target) {
+        int si=0,ei=arr.length-1;
+        
+        while(si<=ei){
+            int mid=(si+ei)/2;
+            if(arr[mid]==target) return mid;
+            else if(arr[si]<=arr[mid]){
+                if(arr[si]<=target&&arr[mid]>target) ei=mid-1;
+                else si=mid+1;
+            }else{
+                if(arr[mid]<target&&arr[ei]>=target) si=mid+1;
+                else ei=mid-1;
+            }
+        }
+        return -1;
+    }
+
     public int binarySearch(int arr[],int si,int ei,int ele){
         while(si<=ei){
             int mid=(si+ei)/2;
@@ -182,5 +200,74 @@ class questions{
             if(hour>H) return false;
         }
         return true;
+    }
+
+    //leetcode 81
+    public boolean search(int[] arr, int target) {
+        int si=0,ei=arr.length-1;
+        
+        while(si<=ei){
+            int mid=(si+ei)/2;
+            if(arr[mid]==target) return true;
+            else if(arr[si]<arr[mid]){
+                if(arr[si]<=target&&arr[mid]>target) ei=mid-1;
+                else si=mid+1;
+            }else if(arr[mid]<arr[si]){
+                if(arr[mid]<target&&arr[ei]>=target) si=mid+1;
+                else ei=mid-1;
+            }else{
+                si++;
+            }
+        }
+        return false;
+    }
+    // leetcode 786
+
+    public int[] kthSmallestPrimeFraction(int[] A, int K) {
+        int n=A.length;
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->{
+            return A[a[0]]*A[b[1]]-A[b[0]]*A[a[1]];
+        });
+        for(int i=1;i<n;i++) pq.add(new int[]{0,i});
+        while(--K>0){
+            int arr[]=pq.poll();
+            arr[0]++;
+            if(arr[0]<arr[1]) pq.add(arr);
+        }
+        int arr[]=pq.remove();
+        return new int[]{A[arr[0]],A[arr[1]]};
+    }
+
+    // leetcode 4
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n=nums1.length;
+        int m-nums2.length;
+        if(n > m){
+            return findMedianSortedArrays(nums2,nums1);
+        }   
+        int omid=(n + m + 1)/2;
+        int si=0,ei=n;
+        while(si<=ei){
+            int sMid=(si+ei)/2;
+            int lMid=omid - sMid;
+            int sl=(sMid==0)?-(int)1e8:nums1[sMid-1];
+            int sr=(sMid==n)?(int)1e8:nums1[sMid];
+
+            int ll=(lMid==0)?-(int)1e8:nums2[lMid-1];
+            int sl=(lMid==m)?(int)1e8:nums2[lMid];
+
+            if(sl > lr){
+                ei=sMid-1;
+            }else if(ll>sr){
+                si=sMid+1;
+            }else{
+                int boundaryOfLeft=Math.max(sl,ll);
+                int boundaryOfRight=Math.min(sr,lr);
+
+                if( (n + m) %2 !=0 ) return boundaryOfLeft;
+                else return (boundaryOfRight+boundaryOfLeft)/2.0;
+            }
+        }
+        return 0.0;
     }
 }

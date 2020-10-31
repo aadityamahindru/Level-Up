@@ -404,4 +404,132 @@ class basics{
         }
         return jumps;
     }
+
+    //===================================SELL BUY STOCKS====================================
+
+    //121 leet code
+    public int maxProfit(int[] prices) {
+        if(prices.length==0) return 0;
+        int T0=0;
+        int T1=-(int)1e8;
+        for(int val:prices){
+            T0=Math.max(T0,T1 + val);
+            T1=Math.max(T1,0 - val);
+        }
+        return T0;
+    }
+
+    //122 leetcode
+
+    public int maxProfit(int[] prices) {
+        if(prices.length==0) return 0;
+        int T0=0;
+        int T1=-(int)1e8;
+        for(int val:prices){
+            T0=Math.max(T0,T1 + val);
+            T1=Math.max(T1,T0 - val);
+        }
+        return T0;
+    }
+
+    //309
+
+    public int maxProfit(int[] prices) {
+        if(prices.length==0) return 0;
+        int T0=0;
+        int T1=-(int)1e8;
+        int T2=0;
+        for(int val:prices){
+            int temp=T0;
+            T0=Math.max(T0,T1 + val);
+            T1=Math.max(T1,T2 - val);
+            T2=temp;
+        }
+        return T0;
+    }
+
+    //123 leet
+
+    public int maxProfit(int[] prices) {
+        if(prices.length==0) return 0;
+        int T20=0;
+        int T21=-(int)1e8;
+        
+        int T10=0;
+        int T11=-(int)1e8;
+        for(int val:prices){
+            T20=Math.max(T20,T21 + val);
+            T21=Math.max(T21,T10 - val);
+            
+            T10=Math.max(T10,T11 + val);
+            T11=Math.max(T11,0 - val);
+        }
+        return T20;
+    }
+
+    //188 leet
+    public int maxProfit(int k, int[] prices) {
+        if(prices.length==0) return 0;
+         if(k>prices.length) k=prices.length;
+         int Ti0[]=new int[k+1];
+         int Ti1[]=new int[k+1];
+         Arrays.fill(Ti1,(int)-1e8);
+         for(int val:prices){
+             for(int K=k;K>0;K--){
+                 Ti0[K]=Math.max(Ti0[K],Ti1[K]+val);
+                 Ti1[K]=Math.max(Ti1[K],Ti0[K-1] - val);
+             }
+         }
+         return Ti0[k];
+     }
+     // if k> lem/2 then it is qualy to infinite transaction this could be an optimization
+
+     public int maxProfit(int k, int[] prices) {
+        if(prices.length==0) return 0;
+         if(k>(prices.length>>>1)){
+             int T0=0;
+             int T1=-(int)1e8;
+             for(int val:prices){
+                 T0=Math.max(T0,T1 + val);
+                 T1=Math.max(T1,T0 - val);
+             }
+             return T0;
+         }
+         int Ti0[]=new int[k+1];
+         int Ti1[]=new int[k+1];
+         Arrays.fill(Ti1,(int)-1e8);
+         for(int val:prices){
+             for(int K=k;K>0;K--){
+                 Ti0[K]=Math.max(Ti0[K],Ti1[K]+val);
+                 Ti1[K]=Math.max(Ti1[K],Ti0[K-1] - val);
+             }
+         }
+         return Ti0[k];
+     }
+
+     //714 leetcode
+     public int maxProfit(int[] prices, int fee) {
+        if(prices.length==0) return 0;
+         int T0=0;
+         int T1=-(int)1e8;
+         for(int val:prices){
+             int T0Prev=T0;
+             T0=Math.max(T0,T1 + val);
+             T1=Math.max(T1,T0Prev - val-fee);
+         }
+         return T0;
+     }
+     //https://practice.geeksforgeeks.org/problems/consecutive-1s-not-allowed1912/1
+     long countStrings(int n) {
+        // code here
+        long ending0=1;
+        long ending1=1;
+        int mod=(int)1e9+7;
+        for(int i=1;i<n;i++){
+            long prevZero=ending0;
+            ending0=(ending0%mod + ending1%mod) %mod;
+            ending1=prevZero%mod;
+        }
+        return (ending0%mod +ending1%mod)%mod;
+    }
 }

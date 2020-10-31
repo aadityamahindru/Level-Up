@@ -44,10 +44,27 @@ class Set2{
         if(i==n) return 0;
         return isPalindrmoic(str,freq)?n-1:n;
     }
+    // hashedin ques
+    public static int countWords(String str, String word){
+        int freq1[]=new int[256];
+        int freq2[]=new int[256];
+        for(int i=0;i<str.length;i++){
+            freq1[str.charAt(i)]++;
+        }
+        for(int i=0;i<word.length;i++){
+            freq2[word.charAt(i)]++;
+        }
+        for(int i=0;i<word.length;i++){
+            if(freq1[word.charAt(i)]==0) return 0;
 
+        }
+    }
     public static void solve(){
         // System.out.println(lexoPalindromic("malayalam"));
-        System.out.println(longestNonPalindromic("aaditya"));
+        // System.out.println(longestNonPalindromic("aaditya"));
+        String str="this is a test string";
+        String word="tsit";
+        System.out.println(countWords(str,word));
     }
     public static void main(String[] args) {
         solve();    

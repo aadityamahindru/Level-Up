@@ -514,4 +514,27 @@ class Solution {
         }
         return -1;
     }
+    //802
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int n=graph.length;
+        int vis[]=new int[n];
+        List<Integer> ans=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            if(vis[i]==1) continue;
+            if(vis[i]==2 || !isCyclic(graph,i,vis))
+                ans.add(i);
+        }
+        return ans;
+    }
+    public boolean isCyclic(int graph[][],int src,int vis[]){
+        vis[src]=1;
+        for(int ele:graph[src]){
+            if(vis[ele]==0){
+                if(isCyclic(graph,ele,vis)) return true;   
+            }
+            else if(vis[ele]==1) return true;
+        }
+        vis[src]=2;
+        return false;
+    }
 }

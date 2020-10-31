@@ -214,4 +214,65 @@ class Solution {
        }
        return ans;
    }
+
+   // 990 leet
+   int parr[];
+    public int find(int u){
+        if(parr[u]==u) return u;
+        return parr[u]=find(parr[u]);
+    } 
+    public boolean equationsPossible(String[] equations) {
+        parr=new int[26];
+        for(int i=0;i<26;i++) parr[i]=i;
+        
+        for(String s:equations){
+            if(s.charAt(1)=='='){
+                parr[find(s.charAt(0)-'a')]=parr[find(s.charAt(3)-'a')];
+            }
+        }
+        for(String s:equations){
+            if(s.charAt(1)=='!'){
+                if(find(s.charAt(0)-'a')==find(s.charAt(3)-'a')) return false;
+            }
+        }
+        return true;
+    }
+
+    //959 leet
+    public int regionsBySlashes(String[] grid) {
+        if(grid.length==0) return 0;
+        int n=grid.length;
+        int m=n+1;
+        parr=new int[m*m];
+        for(int i=1;i<n;i++){
+            for(int j=1;j<n;j++){
+                int p=i+j*m;
+                parr[p]=p;
+            }
+        }
+        int count=1;
+        for(int i=0;i<n;i++){
+            String s=grid[i];
+            for(int j=0;j<s.length();j++){
+                if(s.charAt(j)=='/'){
+                    int p1=find((i+1) + j*m);
+                    int p2=find(i + (j+1) *m );
+                    
+                    if(p1!=p2){
+                        parr[p1]=Math.min(p1,p2);
+                        parr[p2]=Math.min(p1,p2);
+                    }else count++;
+                }else if(s.charAt(j)=='\\'){
+                    int p1=find(i + j*m);
+                    int p2=find((i+1) + (j+1) *m );
+                    
+                    if(p1!=p2){
+                        parr[p1]=Math.min(p1,p2);
+                        parr[p2]=Math.min(p1,p2);
+                    }else count++;
+                }
+            }
+        }
+        return count;
+    }
 }
