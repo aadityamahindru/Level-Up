@@ -60,7 +60,9 @@ class GFG{
         // fillPath(node,arr);
         // System.out.println(arr);
         // reverseLevelOrder(node);
-        reverseLevelOrderOpti(node);
+        // reverseLevelOrderOpti(node);
+        // kthAncestor(node,80,90,10);
+        zigzag(node);
    }
    public static Pair leftRifgtSum(Node node ,ArrayList<Integer> ans){
        if(node==null){
@@ -250,6 +252,69 @@ class GFG{
                 currlvl--;
             } 
             System.out.print(temp.val+" ");
+        }
+    }
+    // https://www.geeksforgeeks.org/kth-ancestor-node-binary-tree-set-2/
+    public static void kthAncestor(Node node,int val1,int val2,int k){
+        ArrayList<Integer> path1=new ArrayList<>();
+        ArrayList<Integer> path2=new ArrayList<>();
+        nodeToRootPath(node,val1,path1);
+        nodeToRootPath(node,val2,path2);
+        int i=path1.size()-1,j=path2.size()-1;
+        int K=k;
+        System.out.println(path1);
+        System.out.println(path2);
+        while(i>=0&&j>=0&&path1.get(i)==path2.get(j)){
+            i--;
+            j--;
+            k--;
+        }
+        if(k<=0){
+            System.out.println(path1.get(i+K));
+        }else{
+            System.out.println("-1");
+        }
+    }
+    public static boolean nodeToRootPath(Node node ,int val,ArrayList<Integer> path){
+        if(node==null) return false;
+        if(node.data==val){
+            path.add(node.data);
+            return true;
+        }
+        boolean left=nodeToRootPath(node.left,val,path);
+        if(left){
+            path.add(node.data);
+            return true;
+        }
+        boolean right=nodeToRootPath(node.right,val,path);
+        if(right){
+            path.add(node.data);
+            return true;
+        }
+        return false;
+    }
+    // zigzag tree using deque
+    public static void zigzag(Node node){
+        ArrayDeque<Node> q=new ArrayDeque<>();
+        q.add(node);
+        int level=1;
+        while(q.size()>0){
+            int size=q.size();
+            while(size-->0){
+                if(level%2==0){
+                    Node temp=q.removeFirst();
+                    System.out.print(temp.data+" ");
+                    if(temp.right!=null) q.addLast(temp.right);
+                    if(temp.left!=null) q.addLast(temp.left);
+                }else{
+                    Node temp=q.removeLast();
+                    System.out.print(temp.data+" ");
+                    if(temp.left!=null) q.addFirst(temp.left);
+                    if(temp.right!=null) q.addFirst(temp.right);
+                }
+            }
+            level++;
+            System.out.println();
         }
     }
 }

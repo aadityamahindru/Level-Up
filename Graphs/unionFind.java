@@ -275,4 +275,50 @@ class Solution {
         }
         return count;
     }
+
+    //924
+
+    int[] parr,size;
+    public int find(int u){
+        if(parr[u]==u) return u;
+        return parr[u]=find(parr[u]);
+    }
+    public int minMalwareSpread(int[][] graph, int[] initial) {
+        if(graph.length==0) return 0;
+        int n=graph.length;
+        size=new int[n];
+        parr=new int[n];
+        for(int i=0;i<n;i++){
+            parr[i]=i;
+            size[i]=1;
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(graph[i][j]==1&&i!=j){
+                    int p1=find(i);
+                    int p2=find(j);
+                    if(p1!=p2){
+                        parr[p1]=p2;
+                        size[p2]+=size[p1];
+                    }
+                }
+            }
+        }
+        int infectedInComponents[]=new int[n];
+        Arrays.sort(initial);
+        for(int i:initial){
+            int p=find(i);
+            infectedInComponents[p]++;
+        }
+        int maxPopulatedComponent =0;
+        int ans=initial[0];
+        for(int i:initial){
+            int p=find(i);
+            if(infectedInComponents[p]==1 && size[p] > maxPopulatedComponent){
+                maxPopulatedComponent=size[p];
+                ans=i;
+            }
+        }
+        return ans;
+    }
 }

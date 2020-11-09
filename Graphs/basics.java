@@ -255,7 +255,7 @@ public class basics{
         ArrayList<Integer> ans=new ArrayList<>();
         boolean vis[]=new boolean[N];
         for(int i=0;i<N;i++){
-            if(!vis[]){
+            if(!vis[i]){
                 topoDfs(i,ans,vis);
             }
         }
@@ -277,6 +277,34 @@ public class basics{
             res.clear();
         }
     }
+
+    // bellman ford algoo
+    //{u,v,w}
+    public static int bellmanFord(int src,ArrayList<int[]> edges){
+        int prevDist[]=new int[N];
+        int currDist[]=new int[N];
+        Arrays.fill(prevDist,(int)1e8);
+        int vtx=1;
+        prevDist[src]=0;
+        while(vtx<=N){
+            boolean isAnyUpdate=false;
+            for(int i=0;i<N;i++) currDist[i]=prevDist[i];
+            for(int e[]:edges[vtx]){
+                int u=e[0],v=e[1],w=e[2];
+                if(prevDist[u]+w<currDist[v]){
+                    currDist[v]=prevDist[u]+w;
+                    isAnyUpdate=true;
+                }
+            }
+            if(!isAnyUpdate) break;
+            if(isAnyUpdate && vtx==N){
+                System.out.println("Negative Cycle");
+                return;
+            }
+            prevDist=currDist;
+            vtx++;
+        }
+    } 
     public static void main(String[] args){
         solve();
     }
