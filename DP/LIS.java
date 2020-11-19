@@ -176,7 +176,7 @@ class LIS{
         return n - len;
     }
 
-    //Leetcode 673
+    //Leet  de 673
     public int findNumberOfLIS(int[] arr) {
         int n=arr.length;
         int[] dp=new int[n];

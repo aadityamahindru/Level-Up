@@ -95,4 +95,5 @@ class allSolution{
         }
         return minimum(node.left);
     }
+    
 }
